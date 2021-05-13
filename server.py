@@ -41,8 +41,22 @@ def find_afterparties():
     sort = request.args.get('sort', '')
 
     url = 'https://app.ticketmaster.com/discovery/v2/events'
-    payload = {'apikey': API_KEY}
+    payload = {'apikey': API_KEY,
+                'keyword': keyword,
+                'postalcode': postalcode,
+                'radius': radius,
+                'unit': unit,
+                'sort': sort}
 
+    # url - accessing tickmaster api/events will return JSON object
+    # payload dictionary as paramteer
+    res = requests.get(url, params=payload)
+    # print('*'*20)
+    # print(res)
+    data = res.json()
+    events = data['_embedded']['events']
+    # print('*'*20)
+    # print(events)
     # TODO: Make a request to the Event Search endpoint to search for events
     #
     # - Use form data from the user to populate any search parameters
@@ -56,7 +70,7 @@ def find_afterparties():
 
     data = {'Test': ['This is just some test data'],
             'page': {'totalElements': 1}}
-    events = []
+    # events = data['_embedded']['events']
 
     return render_template('search-results.html',
                            pformat=pformat,
